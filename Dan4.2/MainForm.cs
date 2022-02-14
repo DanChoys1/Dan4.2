@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Dan4._2
@@ -24,48 +19,13 @@ namespace Dan4._2
             closeFormButton.BackColor = ColorTranslator.FromHtml("#FF0000");
 
             gostRadioButton.Checked = true;
+
+            openFileDialog.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+            saveFileDialog.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
         }
 
-
-
-        //////////////////////////////////////////////HEADER//////////////////////////////////////////////////////////////////
-        private void HeaderPictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                _isHeaderMoving = true;
-                _cursorPosition = new Point(e.X, e.Y);
-            }
-            else
-            {
-                _isHeaderMoving = false;
-            }
-        }
-
-        private void HeaderPictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (_isHeaderMoving)
-            {
-                Point cursorMoveTo;
-
-                cursorMoveTo = this.PointToScreen(new Point(e.X, e.Y));
-                cursorMoveTo.Offset(-_cursorPosition.X, -_cursorPosition.Y);
-
-                this.Location = cursorMoveTo;
-            }
-        }
-
-        private void HeaderPictureBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            _isHeaderMoving = false;
-        }
-
-        private void CloseFormButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void encryptButton_Click(object sender, EventArgs e)
+        //////////////////////////////////////////////ENCRYPT//////////////////////////////////////////////////////////////////
+        private void EncryptButton_Click(object sender, EventArgs e)
         {
             ICipher cipher = null;
 
@@ -111,7 +71,7 @@ namespace Dan4._2
             encryptedTextBoxErrorProvider.Clear();
         }
 
-        private void decipherButton_Click(object sender, EventArgs e)
+        private void DecipherButton_Click(object sender, EventArgs e)
         {
             Byte[] encryptedDataByte;
 
@@ -119,7 +79,7 @@ namespace Dan4._2
             {
                 encryptedDataByte = SplitStringIntoBytes(encryptedTextBox.Text);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 encryptedTextBoxErrorProvider.SetError(encryptedTextBox, "Введены некорректные данные");
                 return;
@@ -176,8 +136,8 @@ namespace Dan4._2
             int byteIndex = 0;
 
             for (int i = 0; i < data.Length; i++)
-            { 
-                if(data[i] == '-')
+            {
+                if (data[i] == '-')
                 {
                     byteIndex++;
                     continue;
@@ -196,7 +156,7 @@ namespace Dan4._2
             return dataByte;
         }
 
-        private void randomInputButton_Click(object sender, EventArgs e)
+        private void RandomInputButton_Click(object sender, EventArgs e)
         {
             Random random = new Random();
 
@@ -220,6 +180,150 @@ namespace Dan4._2
             {
                 keyTextBox.Text += Convert.ToChar(random.Next(minASCII, maxASCII));
             }
+        }
+
+        //////////////////////////////////////////////TOOL_STRIP_MENU//////////////////////////////////////////////////////////////////
+        private void InputOpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String text = InputData();
+
+            if (text != null)
+            {
+                openTextBox.Text = text;
+            }
+        }
+
+        private void InputEncryptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String text = InputData();
+
+            if (text != null)
+            {
+                encryptedTextBox.Text = text;
+            }
+        }
+
+        private void InputKeyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String text = InputData();
+
+            if (text != null)
+            {
+                keyTextBox.Text = text;
+            }
+        }
+
+        private void SaveOpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveData(openTextBox.Text);
+        }
+
+        private void SaveEncryptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveData(encryptedTextBox.Text);
+        }
+
+        private void SaveKeyToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveData(keyTextBox.Text);
+        }
+
+        private String InputData()
+        {
+            DialogResult result = openFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                String text = "";
+
+                try
+                {
+                    using System.IO.StreamReader sr = new System.IO.StreamReader(openFileDialog.OpenFile());
+
+                    string inputText;
+
+                    while ((inputText = sr.ReadLine()) != null)
+                    {
+                        text += inputText;
+                    }
+                }
+                catch (System.IO.IOException)
+                {
+                    text = null;
+                    MessageBox.Show("Файл не может быть прочитан.", "Ошибка!");
+                }
+
+                return text;
+            }
+
+            return null;
+        }
+
+        private void SaveData(String text)
+        {
+            DialogResult result = saveFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                try
+                {
+                    using System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileDialog.OpenFile());
+
+                    sw.WriteLine(text);
+                }
+                catch (System.IO.IOException)
+                {
+                    MessageBox.Show("Не удалось сохранить данные.", "Ошибка!");
+                }
+            }
+        }
+
+        private void AboutProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Лабораторная работа №2\n\n" +
+                            "Создать интерфейс ICipher, который определяет методы поддержки шифрования строк. " +
+                            "В интерфейсе объявляются два метода Encode() и Decode(), которые используются для " +
+                            "шифрования и дешифрования строк, соответственно. Реализовать 2 класса реализующих " +
+                            "данный интерфейс. Алгоритмы: ГОСТ 28147_89, Гаммирование.\n\n" +
+                            "Выполнил стедент группы 404, Азаров Даниил Константинович.\n\n" +
+                            "2022 год.", "О программе");
+        }
+
+        //////////////////////////////////////////////HEADER//////////////////////////////////////////////////////////////////
+        private void HeaderPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                _isHeaderMoving = true;
+                _cursorPosition = new Point(e.X, e.Y);
+            }
+            else
+            {
+                _isHeaderMoving = false;
+            }
+        }
+
+        private void HeaderPictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isHeaderMoving)
+            {
+                Point cursorMoveTo;
+
+                cursorMoveTo = this.PointToScreen(new Point(e.X, e.Y));
+                cursorMoveTo.Offset(-_cursorPosition.X, -_cursorPosition.Y);
+
+                this.Location = cursorMoveTo;
+            }
+        }
+
+        private void HeaderPictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            _isHeaderMoving = false;
+        }
+
+        private void CloseFormButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

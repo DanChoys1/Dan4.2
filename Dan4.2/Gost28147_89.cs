@@ -33,13 +33,6 @@ namespace Dan4._2
                 keyStorage[i] = BitConverter.ToUInt32(keyBytes, i * 4);
             }
 
-/*            int numberAappendCharacters = (openData.Length % 8 == 0) ? 0 : (8 - openData.Length % 8);
-
-            while (numberAappendCharacters-- != 0)
-            {
-                openData += '\0';
-            }*/
-
             Byte[] openDataByte = Encoding.UTF8.GetBytes(openData);
 
             int differenceSize = openDataByte.Length - openData.Length;
