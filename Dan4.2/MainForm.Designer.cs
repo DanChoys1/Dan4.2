@@ -29,6 +29,7 @@ namespace Dan4._2
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.headerPictureBox = new System.Windows.Forms.PictureBox();
             this.closeFormButton = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -43,28 +44,31 @@ namespace Dan4._2
             this.ключToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.тестироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.openTextBox = new System.Windows.Forms.TextBox();
+            this.encryptedTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.keyTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.decipherButton = new System.Windows.Forms.Button();
+            this.encryptButton = new System.Windows.Forms.Button();
+            this.randomInputButton = new System.Windows.Forms.Button();
+            this.groupBox = new System.Windows.Forms.GroupBox();
+            this.gammaXoringRadioButton = new System.Windows.Forms.RadioButton();
+            this.gostRadioButton = new System.Windows.Forms.RadioButton();
+            this.encryptedTextBoxErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.headerPictureBox)).BeginInit();
             this.menuStrip.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.encryptedTextBoxErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // headerPictureBox
             // 
             this.headerPictureBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.headerPictureBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.headerPictureBox.Name = "headerPictureBox";
-            this.headerPictureBox.Size = new System.Drawing.Size(800, 30);
+            this.headerPictureBox.Size = new System.Drawing.Size(914, 40);
             this.headerPictureBox.TabIndex = 0;
             this.headerPictureBox.TabStop = false;
             this.headerPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.HeaderPictureBox_MouseDown);
@@ -73,21 +77,24 @@ namespace Dan4._2
             // 
             // closeFormButton
             // 
-            this.closeFormButton.Location = new System.Drawing.Point(770, 2);
+            this.closeFormButton.Location = new System.Drawing.Point(880, 5);
+            this.closeFormButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.closeFormButton.Name = "closeFormButton";
-            this.closeFormButton.Size = new System.Drawing.Size(25, 25);
+            this.closeFormButton.Size = new System.Drawing.Size(30, 30);
             this.closeFormButton.TabIndex = 1;
             this.closeFormButton.UseVisualStyleBackColor = true;
             this.closeFormButton.Click += new System.EventHandler(this.CloseFormButton_Click);
             // 
             // menuStrip
             // 
+            this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.тестироватьToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(0, 30);
+            this.menuStrip.Location = new System.Drawing.Point(0, 40);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
+            this.menuStrip.Size = new System.Drawing.Size(914, 30);
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -97,7 +104,7 @@ namespace Dan4._2
             this.вводToolStripMenuItem,
             this.сохранитьToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
             // вводToolStripMenuItem
@@ -107,25 +114,25 @@ namespace Dan4._2
             this.зашифрованногоТекстаToolStripMenuItem,
             this.ключToolStripMenuItem});
             this.вводToolStripMenuItem.Name = "вводToolStripMenuItem";
-            this.вводToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.вводToolStripMenuItem.Size = new System.Drawing.Size(166, 26);
             this.вводToolStripMenuItem.Text = "Ввод";
             // 
             // исходногоТекстаToolStripMenuItem
             // 
             this.исходногоТекстаToolStripMenuItem.Name = "исходногоТекстаToolStripMenuItem";
-            this.исходногоТекстаToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.исходногоТекстаToolStripMenuItem.Size = new System.Drawing.Size(261, 26);
             this.исходногоТекстаToolStripMenuItem.Text = "Исходного текста";
             // 
             // зашифрованногоТекстаToolStripMenuItem
             // 
             this.зашифрованногоТекстаToolStripMenuItem.Name = "зашифрованногоТекстаToolStripMenuItem";
-            this.зашифрованногоТекстаToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.зашифрованногоТекстаToolStripMenuItem.Size = new System.Drawing.Size(261, 26);
             this.зашифрованногоТекстаToolStripMenuItem.Text = "Зашифрованного текста";
             // 
             // ключToolStripMenuItem
             // 
             this.ключToolStripMenuItem.Name = "ключToolStripMenuItem";
-            this.ключToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.ключToolStripMenuItem.Size = new System.Drawing.Size(261, 26);
             this.ключToolStripMenuItem.Text = "Ключа";
             // 
             // сохранитьToolStripMenuItem
@@ -135,162 +142,181 @@ namespace Dan4._2
             this.зашифрованныхТекстToolStripMenuItem,
             this.ключToolStripMenuItem1});
             this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(166, 26);
             this.сохранитьToolStripMenuItem.Text = "Сохранить";
             // 
             // исходныйТекстToolStripMenuItem
             // 
             this.исходныйТекстToolStripMenuItem.Name = "исходныйТекстToolStripMenuItem";
-            this.исходныйТекстToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.исходныйТекстToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
             this.исходныйТекстToolStripMenuItem.Text = "Исходный текст";
             // 
             // зашифрованныхТекстToolStripMenuItem
             // 
             this.зашифрованныхТекстToolStripMenuItem.Name = "зашифрованныхТекстToolStripMenuItem";
-            this.зашифрованныхТекстToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.зашифрованныхТекстToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
             this.зашифрованныхТекстToolStripMenuItem.Text = "Зашифрованный текст";
             // 
             // ключToolStripMenuItem1
             // 
             this.ключToolStripMenuItem1.Name = "ключToolStripMenuItem1";
-            this.ключToolStripMenuItem1.Size = new System.Drawing.Size(201, 22);
+            this.ключToolStripMenuItem1.Size = new System.Drawing.Size(249, 26);
             this.ключToolStripMenuItem1.Text = "Ключ";
             // 
             // тестироватьToolStripMenuItem
             // 
             this.тестироватьToolStripMenuItem.Name = "тестироватьToolStripMenuItem";
-            this.тестироватьToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.тестироватьToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.тестироватьToolStripMenuItem.Text = "О программе";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 69);
+            this.label1.Location = new System.Drawing.Point(24, 92);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 15);
+            this.label1.Size = new System.Drawing.Size(118, 20);
             this.label1.TabIndex = 3;
             this.label1.Text = "Исходный текст";
             // 
-            // textBox1
+            // openTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(21, 96);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(627, 23);
-            this.textBox1.TabIndex = 4;
+            this.openTextBox.Location = new System.Drawing.Point(24, 128);
+            this.openTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.openTextBox.Name = "openTextBox";
+            this.openTextBox.Size = new System.Drawing.Size(716, 27);
+            this.openTextBox.TabIndex = 4;
             // 
-            // textBox2
+            // encryptedTextBox
             // 
-            this.textBox2.Location = new System.Drawing.Point(21, 165);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(627, 23);
-            this.textBox2.TabIndex = 6;
+            this.encryptedTextBox.Location = new System.Drawing.Point(24, 220);
+            this.encryptedTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.encryptedTextBox.Name = "encryptedTextBox";
+            this.encryptedTextBox.Size = new System.Drawing.Size(716, 27);
+            this.encryptedTextBox.TabIndex = 6;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 138);
+            this.label2.Location = new System.Drawing.Point(24, 184);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(134, 15);
+            this.label2.Size = new System.Drawing.Size(166, 20);
             this.label2.TabIndex = 5;
             this.label2.Text = "Зашифрованный текст";
             // 
-            // textBox3
+            // keyTextBox
             // 
-            this.textBox3.Location = new System.Drawing.Point(21, 234);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(627, 23);
-            this.textBox3.TabIndex = 8;
+            this.keyTextBox.Location = new System.Drawing.Point(24, 312);
+            this.keyTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.keyTextBox.Name = "keyTextBox";
+            this.keyTextBox.Size = new System.Drawing.Size(716, 27);
+            this.keyTextBox.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 207);
+            this.label3.Location = new System.Drawing.Point(24, 276);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 15);
+            this.label3.Size = new System.Drawing.Size(46, 20);
             this.label3.TabIndex = 7;
             this.label3.Text = "Ключ";
             // 
-            // button1
+            // decipherButton
             // 
-            this.button1.Location = new System.Drawing.Point(679, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(103, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Расшифровать";
-            this.button1.UseVisualStyleBackColor = true;
+            this.decipherButton.Location = new System.Drawing.Point(762, 556);
+            this.decipherButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.decipherButton.Name = "decipherButton";
+            this.decipherButton.Size = new System.Drawing.Size(140, 31);
+            this.decipherButton.TabIndex = 9;
+            this.decipherButton.Text = "Расшифровать";
+            this.decipherButton.UseVisualStyleBackColor = true;
+            this.decipherButton.Click += new System.EventHandler(this.decipherButton_Click);
             // 
-            // button2
+            // encryptButton
             // 
-            this.button2.Location = new System.Drawing.Point(570, 415);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(103, 23);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "Зашифровать";
-            this.button2.UseVisualStyleBackColor = true;
+            this.encryptButton.Location = new System.Drawing.Point(616, 556);
+            this.encryptButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.encryptButton.Name = "encryptButton";
+            this.encryptButton.Size = new System.Drawing.Size(140, 31);
+            this.encryptButton.TabIndex = 10;
+            this.encryptButton.Text = "Зашифровать";
+            this.encryptButton.UseVisualStyleBackColor = true;
+            this.encryptButton.Click += new System.EventHandler(this.encryptButton_Click);
             // 
-            // button3
+            // randomInputButton
             // 
-            this.button3.Location = new System.Drawing.Point(655, 233);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(111, 23);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "Подобрать ключ";
-            this.button3.UseVisualStyleBackColor = true;
+            this.randomInputButton.Location = new System.Drawing.Point(749, 311);
+            this.randomInputButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.randomInputButton.Name = "randomInputButton";
+            this.randomInputButton.Size = new System.Drawing.Size(127, 31);
+            this.randomInputButton.TabIndex = 11;
+            this.randomInputButton.Text = "Подобрать ключ";
+            this.randomInputButton.UseVisualStyleBackColor = true;
+            this.randomInputButton.Click += new System.EventHandler(this.randomInputButton_Click);
             // 
-            // groupBox1
+            // groupBox
             // 
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(21, 282);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(195, 121);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Метод шифрования";
+            this.groupBox.Controls.Add(this.gammaXoringRadioButton);
+            this.groupBox.Controls.Add(this.gostRadioButton);
+            this.groupBox.Location = new System.Drawing.Point(24, 376);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox.Name = "groupBox";
+            this.groupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox.Size = new System.Drawing.Size(223, 161);
+            this.groupBox.TabIndex = 12;
+            this.groupBox.TabStop = false;
+            this.groupBox.Text = "Метод шифрования";
             // 
-            // radioButton2
+            // gammaXoringRadioButton
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 47);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(108, 19);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Гаммирование";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.gammaXoringRadioButton.AutoSize = true;
+            this.gammaXoringRadioButton.Location = new System.Drawing.Point(7, 63);
+            this.gammaXoringRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gammaXoringRadioButton.Name = "gammaXoringRadioButton";
+            this.gammaXoringRadioButton.Size = new System.Drawing.Size(136, 24);
+            this.gammaXoringRadioButton.TabIndex = 1;
+            this.gammaXoringRadioButton.TabStop = true;
+            this.gammaXoringRadioButton.Text = "Гаммирование";
+            this.gammaXoringRadioButton.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // gostRadioButton
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 22);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(99, 19);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Гост 28147-89";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.gostRadioButton.AutoSize = true;
+            this.gostRadioButton.Location = new System.Drawing.Point(7, 29);
+            this.gostRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gostRadioButton.Name = "gostRadioButton";
+            this.gostRadioButton.Size = new System.Drawing.Size(125, 24);
+            this.gostRadioButton.TabIndex = 0;
+            this.gostRadioButton.TabStop = true;
+            this.gostRadioButton.Text = "Гост 28147-89";
+            this.gostRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // encryptedTextBoxErrorProvider
+            // 
+            this.encryptedTextBoxErrorProvider.ContainerControl = this;
+            this.encryptedTextBoxErrorProvider.RightToLeft = true;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(914, 600);
             this.ControlBox = false;
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.groupBox);
+            this.Controls.Add(this.randomInputButton);
+            this.Controls.Add(this.encryptButton);
+            this.Controls.Add(this.decipherButton);
+            this.Controls.Add(this.keyTextBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.encryptedTextBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.openTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.closeFormButton);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.headerPictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MainMenuStrip = this.menuStrip;
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -300,8 +326,9 @@ namespace Dan4._2
             ((System.ComponentModel.ISupportInitialize)(this.headerPictureBox)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBox.ResumeLayout(false);
+            this.groupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.encryptedTextBoxErrorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,18 +349,19 @@ namespace Dan4._2
         private System.Windows.Forms.ToolStripMenuItem зашифрованныхТекстToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ключToolStripMenuItem1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox openTextBox;
+        private System.Windows.Forms.TextBox encryptedTextBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox keyTextBox;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button decipherButton;
+        private System.Windows.Forms.Button encryptButton;
+        private System.Windows.Forms.Button randomInputButton;
         private System.Windows.Forms.ToolStripMenuItem тестироватьToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.GroupBox groupBox;
+        private System.Windows.Forms.RadioButton gammaXoringRadioButton;
+        private System.Windows.Forms.RadioButton gostRadioButton;
+        private System.Windows.Forms.ErrorProvider encryptedTextBoxErrorProvider;
     }
 }
 

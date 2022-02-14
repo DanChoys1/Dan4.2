@@ -33,11 +33,18 @@ namespace Dan4._2
                 keyStorage[i] = BitConverter.ToUInt32(keyBytes, i * 4);
             }
 
+/*            int numberAappendCharacters = (openData.Length % 8 == 0) ? 0 : (8 - openData.Length % 8);
+
+            while (numberAappendCharacters-- != 0)
+            {
+                openData += '\0';
+            }*/
+
             Byte[] openDataByte = Encoding.UTF8.GetBytes(openData);
 
             int differenceSize = openDataByte.Length - openData.Length;
 
-            if (differenceSize > 0)
+            if ((differenceSize > 0) || (openData.Length % 8 != 0))
             {
                 int numberAappendCharacters = 8 - openDataByte.Length % 8;
 
@@ -63,11 +70,6 @@ namespace Dan4._2
 
         public String Decode(Byte[] encryptedData, String key)
         {
-            if (encryptedData.Length % 8 != 0)
-            {
-                throw new Exception("Wrong cipher size");
-            }
-
             Byte[] keyBytes = Encoding.UTF8.GetBytes(key);
 
             const int countKeyStorage = 8;

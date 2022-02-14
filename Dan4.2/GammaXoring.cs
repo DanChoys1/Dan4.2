@@ -52,7 +52,7 @@ namespace Dan4._2
 
                 for (int i = 0; i < differenceSize; i++)
                 {
-                    newKeyBytes[newKeyBytes.Length + i] = newKeyBytes[i];
+                    newKeyBytes[keyBytes.Length + i] = keyBytes[i % keyBytes.Length];
                 }
 
                 keyBytes = newKeyBytes;
