@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Dan4._2
+namespace Program
 {
     class Gost28147_89 : ICipher
     {
@@ -24,6 +24,13 @@ namespace Dan4._2
         public Byte[] Encode(String openData, String key)
         {
             Byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+
+            const int countBytesInKey = 32;
+
+            if (keyBytes.Length != countBytesInKey)
+            {
+                throw new KeyArgumentException("Пароль долже быть 256 битным");
+            }
 
             const int countKeyStorage = 8;
             UInt32[] keyStorage = new UInt32[countKeyStorage];
@@ -63,7 +70,19 @@ namespace Dan4._2
 
         public String Decode(Byte[] encryptedData, String key)
         {
+            if (encryptedData.Length % 8 != 0)
+            {
+                throw new EncryptedTextException("Шифр должен быть кратен 8");
+            }
+
             Byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+
+            const int countBytesInKey = 32;
+
+            if (keyBytes.Length != countBytesInKey)
+            {
+                throw new KeyArgumentException("Пароль долже быть 256 битным");
+            }
 
             const int countKeyStorage = 8;
             UInt32[] keyStorage = new UInt32[countKeyStorage];

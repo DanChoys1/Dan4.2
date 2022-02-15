@@ -1,12 +1,14 @@
 using System;
 using System.Windows.Forms;
 
-namespace Dan4._2
+namespace Program
 {
     static class Program
     {
         /// <summary>
         ///  The main entry point for the application.
+        ///  Добавить логи (NLog)
+        ///  Добавить локализацию (через файлы ресурсов)
         /// </summary>
         [STAThread]
         static void Main()

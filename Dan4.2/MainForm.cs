@@ -3,12 +3,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Dan4._2
+namespace Program
 {
     public partial class MainForm : Form
     {
         private bool _isHeaderMoving = false;
         private Point _cursorPosition;
+
+        private static Random random = new Random();
 
         public MainForm()
         {
@@ -27,44 +29,24 @@ namespace Dan4._2
         //////////////////////////////////////////////ENCRYPT//////////////////////////////////////////////////////////////////
         private void EncryptButton_Click(object sender, EventArgs e)
         {
-            ICipher cipher = null;
+            ICipher cipher = GetCipher();
 
-            if (gostRadioButton.Checked == true)
-            {
-                Byte[] keyBytes = Encoding.UTF8.GetBytes(keyTextBox.Text);
-
-                const int countBytesInKey = 32;
-
-                if (keyBytes.Length != countBytesInKey)
-                {
-                    encryptedTextBoxErrorProvider.SetError(keyTextBox, "Пароль долже состоять из 32 символов");
-                    return;
-                }
-
-                cipher = new Gost28147_89();
-            }
-            else if (gammaXoringRadioButton.Checked == true)
-            {
-                if (keyTextBox.Text.Length == 0)
-                {
-                    encryptedTextBoxErrorProvider.SetError(keyTextBox, "Пароль долже быть длинее 0");
-                    return;
-                }
-
-                if (keyTextBox.Text.Length > openTextBox.Text.Length)
-                {
-                    encryptedTextBoxErrorProvider.SetError(keyTextBox, "Пароль долже быть меньше длины введенного текста");
-                    return;
-                }
-
-                cipher = new GammaXoring();
-            }
-            else
+            if(cipher == null)
             {
                 return;
             }
 
-            Byte[] encryptedDataByte = cipher.Encode(openTextBox.Text, keyTextBox.Text);
+            Byte[] encryptedDataByte;
+
+            try
+            {
+                encryptedDataByte = cipher.Encode(openTextBox.Text, keyTextBox.Text);
+            }
+            catch (Exception ex)
+            {
+                encryptedTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
+                return;
+            }
 
             encryptedTextBox.Text = BitConverter.ToString(encryptedDataByte, 0);
 
@@ -85,48 +67,42 @@ namespace Dan4._2
                 return;
             }
 
-            ICipher cipher = null;
+            ICipher cipher = GetCipher();
 
-            if (gostRadioButton.Checked == true)
+            String encryptedData;
+
+            try
             {
-                if (encryptedDataByte.Length % 8 != 0)
-                {
-                    encryptedTextBoxErrorProvider.SetError(encryptedTextBox, "Шифр должен быть кратен 8");
-                    return;
-                }
-
-                Byte[] keyBytes = Encoding.UTF8.GetBytes(keyTextBox.Text);
-
-                const int countBytesInKey = 32;
-
-                if (keyBytes.Length != countBytesInKey)
-                {
-                    encryptedTextBoxErrorProvider.SetError(keyTextBox, "Пароль долже состоять из 32 символов");
-                    return;
-                }
-
-                cipher = new Gost28147_89();
+                encryptedData = cipher.Decode(encryptedDataByte, keyTextBox.Text);
             }
-            else if (gammaXoringRadioButton.Checked == true)
+            catch (KeyArgumentException ex)
             {
-                if (keyTextBox.Text.Length == 0)
-                {
-                    encryptedTextBoxErrorProvider.SetError(keyTextBox, "Пароль долже быть длинее 0");
-                    return;
-                }
-
-                cipher = new GammaXoring();
-            }
-            else
-            {
+                encryptedTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
                 return;
             }
-
-            String encryptedData = cipher.Decode(encryptedDataByte, keyTextBox.Text);
+            catch (EncryptedTextException ex)
+            {
+                encryptedTextBoxErrorProvider.SetError(encryptedTextBox, ex.Message);
+                return;
+            }
 
             openTextBox.Text = encryptedData;
 
             encryptedTextBoxErrorProvider.Clear();
+        }
+
+        private ICipher GetCipher()
+        {
+            if (gostRadioButton.Checked == true)
+            {
+                return new Gost28147_89();
+            }
+            else if (gammaXoringRadioButton.Checked == true)
+            {
+                return new GammaXoring();
+            }
+
+            return null;
         }
 
         private Byte[] SplitStringIntoBytes(String data)
@@ -158,8 +134,6 @@ namespace Dan4._2
 
         private void RandomInputButton_Click(object sender, EventArgs e)
         {
-            Random random = new Random();
-
             const int minASCII = 33;
             const int maxASCII = 127;
 

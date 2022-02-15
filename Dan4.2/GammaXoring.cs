@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Text;
 
-namespace Dan4._2
+namespace Program
 {
     class GammaXoring : ICipher
     {
         public Byte[] Encode(String openData, String key)
         {
+            if (key.Length == 0)
+            {
+                throw new KeyArgumentException("Пароль долже быть длинее 0 символов");
+            }
+
+            if (key.Length > openData.Length)
+            {
+               throw new KeyArgumentException("Пароль долже быть меньше длины введенного текста");
+            }
+
             Byte[] openDataByte = Encoding.UTF8.GetBytes(openData);
 
             Byte[] keyBytes = FillKeyBytes(openDataByte, key);
@@ -18,6 +28,11 @@ namespace Dan4._2
 
         public String Decode(Byte[] encryptedData, String key)
         {
+            if (key.Length == 0)
+            {
+                throw new KeyArgumentException("Пароль долже быть длинее 0");
+            }
+
             Byte[] keyBytes = FillKeyBytes(encryptedData, key);
 
             Byte[] openDataByte = Coding(encryptedData, keyBytes);

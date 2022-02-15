@@ -56,9 +56,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dan4.2\Dan4.2.csproj">
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dan4.2\Cipher.csproj">
       <Project>{6daab1d0-4d5c-4d6b-8b77-7ab7531ff794}</Project>
-      <Name>Dan4.2</Name>
+      <Name>Cipher</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
