@@ -197,7 +197,7 @@ namespace Program
         }
 
         private UInt32 ShiftingRegister(UInt32 block)
-        {
+        { 
             UInt32 safe = block;
             safe >>= 21;
 

@@ -231,7 +231,8 @@ namespace Program
             // 
             // decipherButton
             // 
-            this.decipherButton.Location = new System.Drawing.Point(762, 556);
+            this.decipherButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.decipherButton.Location = new System.Drawing.Point(616, 556);
             this.decipherButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.decipherButton.Name = "decipherButton";
             this.decipherButton.Size = new System.Drawing.Size(139, 31);
@@ -242,7 +243,7 @@ namespace Program
             // 
             // encryptButton
             // 
-            this.encryptButton.Location = new System.Drawing.Point(616, 556);
+            this.encryptButton.Location = new System.Drawing.Point(763, 556);
             this.encryptButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.encryptButton.Name = "encryptButton";
             this.encryptButton.Size = new System.Drawing.Size(139, 31);
