@@ -7,10 +7,12 @@ namespace Program
 {
     public partial class MainForm : Form
     {
+        private static Random _random;
+
+        Form _form;
+
         private bool _isHeaderMoving = false;
         private Point _cursorPosition;
-
-        private static Random random = new Random();
 
         public MainForm()
         {
@@ -24,21 +26,33 @@ namespace Program
 
             openFileDialog.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
             saveFileDialog.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+
+            _random = new Random();
+
+            CreateAboutDialog();
+
+            this.Show();
+
+            if (Properties.Settings.Default.isShowAboutMenu)
+            {
+                _form.ShowDialog();
+            }
         }
 
-        private void ShowAboutDialog()
+        private void CreateAboutDialog()
         {
-            Form prompt = new Form();
-            prompt.Width = 700;
-            prompt.Height = 500;
-            prompt.Text = "О программе";
-            prompt.MaximizeBox = false;
-            prompt.MinimizeBox = false;
-        
+            _form = new Form();
+            _form.Text = "О программе";
+            _form.Size = new Size(550, 250);
+            _form.StartPosition = FormStartPosition.CenterParent;
+            _form.MaximizeBox = false;
+            _form.MinimizeBox = false;
+
             Label textAbout = new Label();
             textAbout.AutoSize = true;
-            //textAbout.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Left)));
-            textAbout.Dock = DockStyle.Top;
+            textAbout.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            textAbout.Left = 10;
+            textAbout.Top = 10;
             textAbout.Text =    "Лабораторная работа №2" + Environment.NewLine + Environment.NewLine +
                                 "Создать интерфейс ICipher, который определяет методы поддержки шифрования строк. " + Environment.NewLine +
                                 "В интерфейсе объявляются два метода Encode() и Decode(), которые используются для " + Environment.NewLine +
@@ -48,14 +62,26 @@ namespace Program
                                 "2022 год.";
 
             CheckBox checkBox = new CheckBox();
-            checkBox.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Left)));
+            checkBox.Location = new Point(295, 177);
+            checkBox.AutoSize = true;
+            checkBox.TextAlign = ContentAlignment.MiddleCenter;
             checkBox.Text = "Больше не показывать";
+            checkBox.Checked = !Properties.Settings.Default.isShowAboutMenu;
+            //checkBox.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
 
             Button ok = new Button();
             ok.Text = "Ок";
             ok.AutoSize = true;
-            ok.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Right)));
-            ok.Click += (sender, e) => { prompt.Close(); };
+            ok.Location = new Point(450, 175);
+            //ok.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            ok.Click += (sender, e) => 
+            {
+                Properties.Settings.Default.isShowAboutMenu = !checkBox.Checked;
+                Properties.Settings.Default.Save();
+
+                _form.Close();
+            };
 
             Panel panel = new Panel();
             panel.Dock = DockStyle.Fill;
@@ -64,16 +90,13 @@ namespace Program
             panel.Controls.Add(checkBox);
             panel.Controls.Add(ok);
 
-            prompt.Controls.Add(panel);
-
-            prompt.ShowDialog();
+            _form.Controls.Add(panel);
         }
         
         //////////////////////////////////////////////ENCRYPT//////////////////////////////////////////////////////////////////
         private void EncryptButton_Click(object sender, EventArgs e)
         {
-            ShowAboutDialog();
-              ICipher cipher = GetCipher();
+            ICipher cipher = GetCipher();
 
             if(cipher == null)
             {
@@ -196,7 +219,7 @@ namespace Program
 
             for (int i = 0; i < lenghtKey; i++)
             {
-                keyTextBox.Text += Convert.ToChar(random.Next(minASCII, maxASCII));
+                keyTextBox.Text += Convert.ToChar(_random.Next(minASCII, maxASCII));
             }
         }
 
@@ -298,7 +321,7 @@ namespace Program
 
         private void AboutProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowAboutDialog();
+            _form.ShowDialog();
         }
 
         //////////////////////////////////////////////HEADER//////////////////////////////////////////////////////////////////
