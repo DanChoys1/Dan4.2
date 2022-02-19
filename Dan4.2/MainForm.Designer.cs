@@ -44,8 +44,6 @@ namespace Program
             this.saveKeyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.openTextBox = new System.Windows.Forms.TextBox();
-            this.encryptedTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.keyTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -58,6 +56,8 @@ namespace Program
             this.encryptedTextBoxErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openTextBox = new System.Windows.Forms.RichTextBox();
+            this.encryptedTextBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.headerPictureBox)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.groupBox.SuspendLayout();
@@ -184,24 +184,10 @@ namespace Program
             this.label1.TabIndex = 3;
             this.label1.Text = "Исходный текст";
             // 
-            // openTextBox
-            // 
-            this.openTextBox.Location = new System.Drawing.Point(21, 96);
-            this.openTextBox.Name = "openTextBox";
-            this.openTextBox.Size = new System.Drawing.Size(627, 23);
-            this.openTextBox.TabIndex = 4;
-            // 
-            // encryptedTextBox
-            // 
-            this.encryptedTextBox.Location = new System.Drawing.Point(21, 165);
-            this.encryptedTextBox.Name = "encryptedTextBox";
-            this.encryptedTextBox.Size = new System.Drawing.Size(627, 23);
-            this.encryptedTextBox.TabIndex = 6;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 138);
+            this.label2.Location = new System.Drawing.Point(21, 189);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(134, 15);
             this.label2.TabIndex = 5;
@@ -209,7 +195,7 @@ namespace Program
             // 
             // keyTextBox
             // 
-            this.keyTextBox.Location = new System.Drawing.Point(21, 234);
+            this.keyTextBox.Location = new System.Drawing.Point(21, 292);
             this.keyTextBox.Name = "keyTextBox";
             this.keyTextBox.Size = new System.Drawing.Size(627, 23);
             this.keyTextBox.TabIndex = 8;
@@ -217,7 +203,7 @@ namespace Program
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 207);
+            this.label3.Location = new System.Drawing.Point(21, 274);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(38, 15);
             this.label3.TabIndex = 7;
@@ -246,7 +232,7 @@ namespace Program
             // 
             // randomInputButton
             // 
-            this.randomInputButton.Location = new System.Drawing.Point(655, 233);
+            this.randomInputButton.Location = new System.Drawing.Point(655, 291);
             this.randomInputButton.Name = "randomInputButton";
             this.randomInputButton.Size = new System.Drawing.Size(111, 23);
             this.randomInputButton.TabIndex = 11;
@@ -258,9 +244,9 @@ namespace Program
             // 
             this.groupBox.Controls.Add(this.gammaXoringRadioButton);
             this.groupBox.Controls.Add(this.gostRadioButton);
-            this.groupBox.Location = new System.Drawing.Point(21, 282);
+            this.groupBox.Location = new System.Drawing.Point(21, 327);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(195, 121);
+            this.groupBox.Size = new System.Drawing.Size(165, 82);
             this.groupBox.TabIndex = 12;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Метод шифрования";
@@ -296,20 +282,36 @@ namespace Program
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
+            // openTextBox
+            // 
+            this.openTextBox.Location = new System.Drawing.Point(21, 87);
+            this.openTextBox.Name = "openTextBox";
+            this.openTextBox.Size = new System.Drawing.Size(627, 100);
+            this.openTextBox.TabIndex = 13;
+            this.openTextBox.Text = "";
+            // 
+            // encryptedTextBox
+            // 
+            this.encryptedTextBox.Location = new System.Drawing.Point(21, 207);
+            this.encryptedTextBox.Name = "encryptedTextBox";
+            this.encryptedTextBox.Size = new System.Drawing.Size(627, 64);
+            this.encryptedTextBox.TabIndex = 14;
+            this.encryptedTextBox.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.ControlBox = false;
+            this.Controls.Add(this.encryptedTextBox);
+            this.Controls.Add(this.openTextBox);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.randomInputButton);
             this.Controls.Add(this.encryptButton);
             this.Controls.Add(this.decipherButton);
             this.Controls.Add(this.keyTextBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.encryptedTextBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.openTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.closeFormButton);
             this.Controls.Add(this.menuStrip);
@@ -349,8 +351,6 @@ namespace Program
         private System.Windows.Forms.ToolStripMenuItem saveEncryptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveKeyToolStripMenuItem1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox openTextBox;
-        private System.Windows.Forms.TextBox encryptedTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox keyTextBox;
         private System.Windows.Forms.Label label3;
@@ -364,6 +364,8 @@ namespace Program
         private System.Windows.Forms.ErrorProvider encryptedTextBoxErrorProvider;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.RichTextBox encryptedTextBox;
+        private System.Windows.Forms.RichTextBox openTextBox;
     }
 }
 

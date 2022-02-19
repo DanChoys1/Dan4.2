@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Program
 {
-    class GammaXoring : ICipher
+    public class GammaXoring : ICipher
     {
         public Byte[] Encode(String openData, String key)
         {

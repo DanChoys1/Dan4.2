@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Program
 {
-    class Gost28147_89 : ICipher
+   public class Gost28147_89 : ICipher
     {
         private readonly Byte[,] replacementBlock;
 
