@@ -103,59 +103,43 @@ namespace Program
                 return;
             }
 
-            Byte[] encryptedDataByte;
-
             try
             {
-                encryptedDataByte = cipher.Encode(openTextBox.Text, keyTextBox.Text);
+                encryptedTextBox.Text = cipher.Encode(openTextBox.Text, keyTextBox.Text);
             }
             catch (Exception ex)
             {
-                encryptedTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
+                cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
                 return;
             }
 
-            encryptedTextBox.Text = BitConverter.ToString(encryptedDataByte, 0);
-
-            encryptedTextBoxErrorProvider.Clear();
+            cipherTextBoxErrorProvider.Clear();
         }
 
         private void DecipherButton_Click(object sender, EventArgs e)
         {
-            Byte[] encryptedDataByte;
-
-            try
-            {
-                encryptedDataByte = SplitStringIntoBytes(encryptedTextBox.Text);
-            }
-            catch (Exception)
-            {
-                encryptedTextBoxErrorProvider.SetError(encryptedTextBox, "Введены некорректные данные");
-                return;
-            }
-
             ICipher cipher = GetCipher();
 
             String encryptedData;
 
             try
             {
-                encryptedData = cipher.Decode(encryptedDataByte, keyTextBox.Text);
+                encryptedData = cipher.Decode(encryptedTextBox.Text, keyTextBox.Text);
             }
             catch (KeyArgumentException ex)
             {
-                encryptedTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
+                cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
                 return;
             }
             catch (EncryptedTextException ex)
             {
-                encryptedTextBoxErrorProvider.SetError(encryptedTextBox, ex.Message);
+                cipherTextBoxErrorProvider.SetError(encryptedTextBox, ex.Message);
                 return;
             }
 
             openTextBox.Text = encryptedData;
 
-            encryptedTextBoxErrorProvider.Clear();
+            cipherTextBoxErrorProvider.Clear();
         }
 
         private ICipher GetCipher()
@@ -170,33 +154,6 @@ namespace Program
             }
 
             return null;
-        }
-
-        private Byte[] SplitStringIntoBytes(String data)
-        {
-            String[] splitData = new String[data.Length];
-
-            int byteIndex = 0;
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] == '-')
-                {
-                    byteIndex++;
-                    continue;
-                }
-
-                splitData[byteIndex] += data[i];
-            }
-
-            Byte[] dataByte = new Byte[++byteIndex];
-
-            for (int i = 0; i < byteIndex; i++)
-            {
-                dataByte[i] = byte.Parse(splitData[i], System.Globalization.NumberStyles.HexNumber);
-            }
-
-            return dataByte;
         }
 
         private void RandomInputButton_Click(object sender, EventArgs e)

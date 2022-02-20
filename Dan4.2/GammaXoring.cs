@@ -5,7 +5,7 @@ namespace Program
 {
     public class GammaXoring : ICipher
     {
-        public Byte[] Encode(String openData, String key)
+        public String Encode(String openData, String key)
         {
             if (key.Length == 0)
             {
@@ -19,23 +19,34 @@ namespace Program
 
             Byte[] openDataByte = Encoding.UTF8.GetBytes(openData);
 
-            Byte[] keyBytes = FillKeyBytes(openDataByte, key);
+            Byte[] keyBytes = FillKeyBytes(openDataByte.Length, key);
 
             Byte[] encryptedDataByte = Coding(openDataByte, keyBytes);
 
-            return encryptedDataByte;
+            return BitConverter.ToString(encryptedDataByte, 0);
         }
 
-        public String Decode(Byte[] encryptedData, String key)
+        public String Decode(String encryptedData, String key)
         {
             if (key.Length == 0)
             {
                 throw new KeyArgumentException("Пароль долже быть длинее 0");
             }
 
-            Byte[] keyBytes = FillKeyBytes(encryptedData, key);
+            Byte[] encryptedDataByte;
 
-            Byte[] openDataByte = Coding(encryptedData, keyBytes);
+            try
+            {
+                encryptedDataByte = SplitStringIntoBytes(encryptedData);
+            }
+            catch (Exception)
+            {
+                throw new EncryptedTextException("Введены некорректные данные"); 
+            }
+
+            Byte[] keyBytes = FillKeyBytes(encryptedDataByte.Length, key);
+
+            Byte[] openDataByte = Coding(encryptedDataByte, keyBytes);
 
             String openData = Encoding.UTF8.GetString(openDataByte);
 
@@ -52,11 +63,11 @@ namespace Program
             return data;
         }
 
-        private Byte[] FillKeyBytes(Byte[] dataByte, String key)
+        private Byte[] FillKeyBytes(int lengthKey, String key)
         {
             Byte[] keyBytes = Encoding.UTF8.GetBytes(key);
 
-            int differenceSize = dataByte.Length - keyBytes.Length;
+            int differenceSize = lengthKey - keyBytes.Length;
 
             if (differenceSize > 0)
             {
@@ -73,6 +84,33 @@ namespace Program
             }
 
             return keyBytes;
+        }
+
+        private Byte[] SplitStringIntoBytes(String data)
+        {
+            String[] splitData = new String[data.Length];
+
+            int byteIndex = 0;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] == '-')
+                {
+                    byteIndex++;
+                    continue;
+                }
+
+                splitData[byteIndex] += data[i];
+            }
+
+            Byte[] dataByte = new Byte[++byteIndex];
+
+            for (int i = 0; i < byteIndex; i++)
+            {
+                dataByte[i] = byte.Parse(splitData[i], System.Globalization.NumberStyles.HexNumber);
+            }
+
+            return dataByte;
         }
     }
 }

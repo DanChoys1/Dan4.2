@@ -6,8 +6,8 @@ namespace Program
 {
     interface ICipher
     {
-        public Byte[] Encode(String openData, String key);
+        public String Encode(String openData, String key);
 
-        public String Decode(Byte[] encryptedData, String key);
+        public String Decode(String encryptedData, String key);
     }
 }

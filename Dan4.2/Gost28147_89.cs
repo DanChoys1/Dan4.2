@@ -21,7 +21,7 @@ namespace Program
                                                };
         }
 
-        public Byte[] Encode(String openData, String key)
+        public String Encode(String openData, String key)
         {
             Byte[] keyBytes = Encoding.UTF8.GetBytes(key);
 
@@ -65,12 +65,23 @@ namespace Program
 
             Byte[] encryptedDataByte = Coding(openDataByte, keyStorage, true);
 
-            return encryptedDataByte;
+            return BitConverter.ToString(encryptedDataByte, 0);
         }
 
-        public String Decode(Byte[] encryptedData, String key)
+        public String Decode(String encryptedData, String key)
         {
-            if (encryptedData.Length % 8 != 0)
+            Byte[] encryptedDataByte;
+
+            try
+            {
+                encryptedDataByte = SplitStringIntoBytes(encryptedData);
+            }
+            catch (Exception)
+            {
+                throw new EncryptedTextException("Введены некорректные данные");
+            }
+
+            if (encryptedDataByte.Length % 8 != 0)
             {
                 throw new EncryptedTextException("Шифр должен быть кратен 8");
             }
@@ -92,7 +103,7 @@ namespace Program
                 keyStorage[i] = BitConverter.ToUInt32(keyBytes, i * 4);
             }
 
-            Byte[] openDataByte = Coding(encryptedData, keyStorage, false);
+            Byte[] openDataByte = Coding(encryptedDataByte, keyStorage, false);
 
             String openData = Encoding.UTF8.GetString(openDataByte);
 
@@ -210,6 +221,33 @@ namespace Program
         private UInt32 SumFromMod_2(UInt32 block, UInt32 rightBlock)
         {
             return block ^ rightBlock;
+        }
+
+        private Byte[] SplitStringIntoBytes(String data)
+        {
+            String[] splitData = new String[data.Length];
+
+            int byteIndex = 0;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] == '-')
+                {
+                    byteIndex++;
+                    continue;
+                }
+
+                splitData[byteIndex] += data[i];
+            }
+
+            Byte[] dataByte = new Byte[++byteIndex];
+
+            for (int i = 0; i < byteIndex; i++)
+            {
+                dataByte[i] = byte.Parse(splitData[i], System.Globalization.NumberStyles.HexNumber);
+            }
+
+            return dataByte;
         }
     }
 }

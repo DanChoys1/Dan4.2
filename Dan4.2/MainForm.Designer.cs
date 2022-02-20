@@ -53,7 +53,7 @@ namespace Program
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.gammaXoringRadioButton = new System.Windows.Forms.RadioButton();
             this.gostRadioButton = new System.Windows.Forms.RadioButton();
-            this.encryptedTextBoxErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.cipherTextBoxErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openTextBox = new System.Windows.Forms.RichTextBox();
@@ -61,7 +61,7 @@ namespace Program
             ((System.ComponentModel.ISupportInitialize)(this.headerPictureBox)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.groupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.encryptedTextBoxErrorProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cipherTextBoxErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // headerPictureBox
@@ -275,8 +275,8 @@ namespace Program
             // 
             // encryptedTextBoxErrorProvider
             // 
-            this.encryptedTextBoxErrorProvider.ContainerControl = this;
-            this.encryptedTextBoxErrorProvider.RightToLeft = true;
+            this.cipherTextBoxErrorProvider.ContainerControl = this;
+            this.cipherTextBoxErrorProvider.RightToLeft = true;
             // 
             // openFileDialog
             // 
@@ -330,7 +330,7 @@ namespace Program
             this.menuStrip.PerformLayout();
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.encryptedTextBoxErrorProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cipherTextBoxErrorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -361,7 +361,7 @@ namespace Program
         private System.Windows.Forms.GroupBox groupBox;
         private System.Windows.Forms.RadioButton gammaXoringRadioButton;
         private System.Windows.Forms.RadioButton gostRadioButton;
-        private System.Windows.Forms.ErrorProvider encryptedTextBoxErrorProvider;
+        private System.Windows.Forms.ErrorProvider cipherTextBoxErrorProvider;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.RichTextBox encryptedTextBox;
