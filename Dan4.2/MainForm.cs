@@ -92,8 +92,9 @@ namespace Program
 
             _form.Controls.Add(panel);
         }
-        
-        //////////////////////////////////////////////ENCRYPT//////////////////////////////////////////////////////////////////
+
+        #region Encrypting text function
+
         private void EncryptButton_Click(object sender, EventArgs e)
         {
             ICipher cipher = GetCipher();
@@ -180,7 +181,10 @@ namespace Program
             }
         }
 
-        //////////////////////////////////////////////TOOL_STRIP_MENU//////////////////////////////////////////////////////////////////
+        #endregion
+
+        #region Tool strip menu 
+
         private void InputOpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             String text = InputData();
@@ -281,7 +285,10 @@ namespace Program
             _form.ShowDialog();
         }
 
-        //////////////////////////////////////////////HEADER//////////////////////////////////////////////////////////////////
+        #endregion
+
+        #region Form's header functional
+
         private void HeaderPictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -317,5 +324,7 @@ namespace Program
         {
             Application.Exit();
         }
+
+        #endregion
     }
 }

@@ -4,12 +4,12 @@ using System.Text;
 namespace Program
 {
    public class Gost28147_89 : ICipher
-    {
-        private readonly Byte[,] replacementBlock;
+   {
+        private readonly Byte[,] _replacementBlock;
 
         public Gost28147_89()
         {
-            replacementBlock = new Byte[8, 16] {
+            _replacementBlock = new Byte[8, 16] {
                                                 {0xF, 0xC, 0x2, 0xA, 0x6, 0x4, 0x5, 0x0, 0x7, 0x9, 0xE, 0xD, 0x1, 0xB, 0x8, 0x3},
                                                 {0xB, 0x6, 0x3, 0x4, 0xC, 0xF, 0xE, 0x2, 0x7, 0xD, 0x8, 0x0, 0x5, 0xA, 0x9, 0x1},
                                                 {0x1, 0xC, 0xB, 0x0, 0xF, 0xE, 0x6, 0x5, 0xA, 0xD, 0x4, 0x8, 0x9, 0x3, 0x7, 0x2},
@@ -201,7 +201,7 @@ namespace Program
             for (int i = 7; i >= 0; i--)
             {
                 block <<= 4;
-                block |= replacementBlock[i, splitBlock[i]];
+                block |= _replacementBlock[i, splitBlock[i]];
             }
 
             return block;
@@ -249,5 +249,5 @@ namespace Program
 
             return dataByte;
         }
-    }
+   }
 }
