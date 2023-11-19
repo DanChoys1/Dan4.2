@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Security.Cryptography.Xml;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Program
@@ -14,6 +16,8 @@ namespace Program
         private bool _isHeaderMoving = false;
         private Point _cursorPosition;
 
+        private Gost28147_89 gost = new Gost28147_89();
+
         public MainForm()
         {
             InitializeComponent();
@@ -21,11 +25,6 @@ namespace Program
             headerPictureBox.BackColor = ColorTranslator.FromHtml("#a4e6fc");
             menuStrip.BackColor = ColorTranslator.FromHtml("#a4effc");
             closeFormButton.BackColor = ColorTranslator.FromHtml("#FF0000");
-
-            gostRadioButton.Checked = true;
-
-            openFileDialog.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
-            saveFileDialog.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
 
             _random = new Random();
 
@@ -53,7 +52,7 @@ namespace Program
             textAbout.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             textAbout.Left = 10;
             textAbout.Top = 10;
-            textAbout.Text =    "Лабораторная работа №2" + Environment.NewLine + Environment.NewLine +
+            textAbout.Text = "Лабораторная работа №2" + Environment.NewLine + Environment.NewLine +
                                 "Создать интерфейс ICipher, который определяет методы поддержки шифрования строк. " + Environment.NewLine +
                                 "В интерфейсе объявляются два метода Encode() и Decode(), которые используются для " + Environment.NewLine +
                                 "шифрования и дешифрования строк, соответственно. Реализовать 2 класса реализующих " + Environment.NewLine +
@@ -75,7 +74,7 @@ namespace Program
             ok.Location = new Point(450, 175);
             //ok.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
-            ok.Click += (sender, e) => 
+            ok.Click += (sender, e) =>
             {
                 Properties.Settings.Default.isShowAboutMenu = !checkBox.Checked;
                 Properties.Settings.Default.Save();
@@ -94,74 +93,44 @@ namespace Program
         }
 
         #region Encrypting text function
-        static string s;
         private void EncryptButton_Click(object sender, EventArgs e)
         {
-            //ICipher cipher = GetCipher();
+            cipherTextBoxErrorProvider.Clear();
+            encryptedTextBox.Text = "";
 
-            //if(cipher == null)
-            //{
-            //    return;
-            //}
-
-            //try
-            //{
-            //    encryptedTextBox.Text = cipher.Encode(openTextBox.Text, keyTextBox.Text);
-            //}
-            //catch (Exception ex)
-            //{
-            //    cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
-            //    return;
-            //}
-
-            //cipherTextBoxErrorProvider.Clear();
-
-            Gost28147_89 gost = new Gost28147_89();
-            encryptedTextBox.Text = gost.GammaCrypt(openTextBox.Text, keyTextBox.Text, keyTextBox.Text.Substring(0, keyTextBox.Text.Length/4));
+            try
+            {
+                byte[] ciph = gost.GammaCrypt(Encoding.UTF8.GetBytes(openTextBox.Text), keyTextBox.Text, sinchrTextBox.Text);
+                encryptedTextBox.Text = BitConverter.ToString(ciph);
+            }
+            catch (Exception ex)
+            {
+                cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
+            }
         }
 
         private void DecipherButton_Click(object sender, EventArgs e)
         {
-            //ICipher cipher = GetCipher();
+            cipherTextBoxErrorProvider.Clear();
 
-            //String encryptedData;
-
-            //try
-            //{
-            //    encryptedData = cipher.Decode(encryptedTextBox.Text, keyTextBox.Text);
-            //}
-            //catch (KeyArgumentException ex)
-            //{
-            //    cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
-            //    return;
-            //}
-            //catch (EncryptedTextException ex)
-            //{
-            //    cipherTextBoxErrorProvider.SetError(encryptedTextBox, ex.Message);
-            //    return;
-            //}
-
-            //openTextBox.Text = encryptedData;
-
-            //cipherTextBoxErrorProvider.Clear();
-
-            Gost28147_89 gost = new Gost28147_89();
-            String encryptedData = gost.GammaCrypt(encryptedTextBox.Text, keyTextBox.Text, keyTextBox.Text.Substring(0, keyTextBox.Text.Length / 4));
-            openTextBox.Text = encryptedData;
-        }
-
-        private ICipher GetCipher()
-        {
-            if (gostRadioButton.Checked == true)
+            try
             {
-                return new Gost28147_89();
+                byte[] ciph = gost.SplitStringIntoBytes(encryptedTextBox.Text);
+                byte[] deciph = gost.GammaCrypt(ciph, keyTextBox.Text, sinchrTextBox.Text);
+                openTextBox.Text = Encoding.UTF8.GetString(deciph);
             }
-            else if (gammaXoringRadioButton.Checked == true)
+            catch (KeyArgumentException ex)
             {
-                return new GammaXoring();
+                cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
             }
-
-            return null;
+            catch (RGSPCArgumentException ex)
+            {
+                cipherTextBoxErrorProvider.SetError(sinchrTextBox, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                cipherTextBoxErrorProvider.SetError(encryptedTextBox, "Не правильный формат представления байтов");
+            }
         }
 
         private void RandomInputButton_Click(object sender, EventArgs e)
@@ -169,22 +138,22 @@ namespace Program
             const int minASCII = 33;
             const int maxASCII = 127;
 
-            int lenghtKey = 0;
-
-            if (gostRadioButton.Checked == true)
-            {
-                lenghtKey = 32;
-            }
-            else if (gammaXoringRadioButton.Checked == true)
-            {
-                lenghtKey = openTextBox.Text.Length;
-            }
-
             keyTextBox.Text = "";
-
-            for (int i = 0; i < lenghtKey; i++)
+            for (int i = 0; i < 256 / 8; i++)
             {
                 keyTextBox.Text += Convert.ToChar(_random.Next(minASCII, maxASCII));
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            const int minASCII = 33;
+            const int maxASCII = 127;
+
+            sinchrTextBox.Text = "";
+            for (int i = 0; i < 64 / 8; i++)
+            {
+                sinchrTextBox.Text += Convert.ToChar(_random.Next(minASCII, maxASCII));
             }
         }
 
@@ -194,81 +163,86 @@ namespace Program
 
         private void InputOpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String text = InputData();
-
-            if (text != null)
+            byte[] bytes = InputData();
+            if (bytes != null)
             {
-                openTextBox.Text = text;
+                openTextBox.Text = Encoding.UTF8.GetString(bytes); ;
             }
         }
 
         private void InputEncryptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String text = InputData();
-
-            if (text != null)
+            byte[] bytes = InputData();
+            if (bytes != null)
             {
-                encryptedTextBox.Text = text;
+                encryptedTextBox.Text = BitConverter.ToString(bytes);
             }
         }
 
         private void InputKeyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String text = InputData();
-
-            if (text != null)
+            byte[] bytes = InputData();
+            if (bytes != null)
             {
-                keyTextBox.Text = text;
+                keyTextBox.Text = Encoding.UTF8.GetString(bytes); ;
+            }
+        }
+
+        private void синхропосылкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            byte[] bytes = InputData();
+            if (bytes != null)
+            {
+                sinchrTextBox.Text = Encoding.UTF8.GetString(bytes); ;
             }
         }
 
         private void SaveOpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveData(openTextBox.Text);
+            SaveData(Encoding.UTF8.GetBytes(openTextBox.Text));
         }
 
         private void SaveEncryptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveData(encryptedTextBox.Text);
+            SaveData(gost.SplitStringIntoBytes(encryptedTextBox.Text));
         }
 
         private void SaveKeyToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            SaveData(keyTextBox.Text);
+            SaveData(Encoding.UTF8.GetBytes(keyTextBox.Text));
         }
 
-        private String InputData()
+        private void синхропосылкаToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveData(Encoding.UTF8.GetBytes(sinchrTextBox.Text));
+        }
+
+        private byte[] InputData()
         {
             DialogResult result = openFileDialog.ShowDialog();
 
+            byte[] bytes = null;
             if (result == DialogResult.OK)
             {
-                String text = "";
-
                 try
                 {
-                    using System.IO.StreamReader sr = new System.IO.StreamReader(openFileDialog.OpenFile());
+                    FileStream DataFile = new FileStream(openFileDialog.FileName, FileMode.Open);
+                    BinaryReader br = new BinaryReader(DataFile);
+                    bytes = br.ReadBytes((int)DataFile.Length);
 
-                    string inputText;
-
-                    while ((inputText = sr.ReadLine()) != null)
-                    {
-                        text += inputText;
-                    }
+                    br.Close();
+                    DataFile.Close();
                 }
-                catch (System.IO.IOException)
+                catch (System.IO.IOException e)
                 {
-                    text = null;
                     MessageBox.Show("Файл не может быть прочитан.", "Ошибка!");
                 }
-
-                return text;
             }
 
-            return null;
+            return bytes;
         }
 
-        private void SaveData(String text)
+        private void SaveData(byte[] bytes)
         {
             DialogResult result = saveFileDialog.ShowDialog();
 
@@ -276,11 +250,12 @@ namespace Program
             {
                 try
                 {
-                    using System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileDialog.OpenFile());
+                    FileStream DataFile = new FileStream(saveFileDialog.FileName, FileMode.Create);
+                    DataFile.Write(bytes, 0, bytes.Length);
 
-                    sw.WriteLine(text);
+                    DataFile.Close();
                 }
-                catch (System.IO.IOException)
+                catch (System.IO.IOException e)
                 {
                     MessageBox.Show("Не удалось сохранить данные.", "Ошибка!");
                 }

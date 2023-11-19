@@ -43,26 +43,26 @@ namespace Program
 
             Byte[] openDataByte = Encoding.UTF8.GetBytes(openData);
 
-            //int differenceSize = openDataByte.Length - openData.Length;
+            int differenceSize = openDataByte.Length - openData.Length;
 
-            //if ((differenceSize > 0) || (openData.Length % 8 != 0))
-            //{
-            //    int numberAappendCharacters = 8 - openDataByte.Length % 8;
+            if ((differenceSize > 0) || (openData.Length % 8 != 0))
+            {
+                int numberAappendCharacters = 8 - openDataByte.Length % 8;
 
-            //    Byte[] newOpenDataByte = new Byte[openDataByte.Length + numberAappendCharacters];
-            //    openDataByte.CopyTo(newOpenDataByte, 0);
+                Byte[] newOpenDataByte = new Byte[openDataByte.Length + numberAappendCharacters];
+                openDataByte.CopyTo(newOpenDataByte, 0);
 
-            //    Char[] nullChar = { '\0' };
-            //    Byte[] nullByte = Encoding.UTF8.GetBytes(nullChar);
+                Char[] nullChar = { '\0' };
+                Byte[] nullByte = Encoding.UTF8.GetBytes(nullChar);
 
-            //    while (numberAappendCharacters > 0)
-            //    {
-            //        newOpenDataByte[newOpenDataByte.Length - numberAappendCharacters] = nullByte[0];
-            //        numberAappendCharacters--;
-            //    }
+                while (numberAappendCharacters > 0)
+                {
+                    newOpenDataByte[newOpenDataByte.Length - numberAappendCharacters] = nullByte[0];
+                    numberAappendCharacters--;
+                }
 
-            //    openDataByte = newOpenDataByte;
-            //}
+                openDataByte = newOpenDataByte;
+            }
 
             Byte[] encryptedDataByte = Coding(openDataByte, keyStorage, true);
             return BitConverter.ToString(encryptedDataByte, 0);
@@ -104,16 +104,19 @@ namespace Program
 
             return Encoding.UTF8.GetString(openDataByte);
         }
-        static List<byte[]> l = new List<byte[]>();
-        static List<byte[]> r = new List<byte[]>();
-        static bool f = false;
 
-        public string GammaCrypt(String encryptedData, String key, String rgpch)
+        public Byte[] GammaCrypt(Byte[] data, String key, String rgpch)
         {
+            if (data.Length == 0) return new byte[0];
             Byte[] keyBytes = Encoding.UTF8.GetBytes(key);
             if (keyBytes.Length != 32)
             {
                 throw new KeyArgumentException("Пароль долже быть 256 битным");
+            }
+            Byte[] rgpchBytes = Encoding.UTF8.GetBytes(rgpch);
+            if (rgpchBytes.Length != 8)
+            {
+                throw new RGSPCArgumentException("Синхропосылка должна быть 64 бита");
             }
 
             UInt32[] keyStorage = new UInt32[8];
@@ -122,28 +125,8 @@ namespace Program
                 keyStorage[i] = BitConverter.ToUInt32(keyBytes, i * 4);
             }
 
-            Byte[] rgpchBytes = Encoding.UTF8.GetBytes(rgpch);
-            if (rgpchBytes.Length != 8)
-            {
-                throw new KeyArgumentException("Пароль долже быть 256 битным");
-            }
-
             //Crypt
             rgpchBytes = Coding(rgpchBytes, keyStorage, true);
-            Byte[] data = Encoding.UTF8.GetBytes(encryptedData);
-            //UInt64[] res = new UInt64[(int)Math.Ceiling(data.Length / 8.0)];
-
-            //if (f)
-            //{
-            //    bool a = data.SequenceEqual(o);
-            //    int azcbxv = 0;
-            //}
-            //o = data;
-
-
-            //Byte[] z = Encoding.UTF8.GetBytes(encryptedData);
-            //string x = Encoding.UTF8.GetString(z);
-
             for (int i = 0; i < Math.Ceiling(data.Length / 8.0); i++)
             {
                 UInt32 leftRgpch = BitConverter.ToUInt32(rgpchBytes, 0);
@@ -153,28 +136,6 @@ namespace Program
                 byte[] leftRgpchBytes = BitConverter.GetBytes(leftRgpch);
                 byte[] rightRgpchByte = BitConverter.GetBytes(rightRgpch);
 
-                //if (f)
-                //{
-                //    if (l[i].SequenceEqual(leftRgpchBytes))
-                //    {
-                //        int asd = 0;
-                //    }
-                //    if (r[i].SequenceEqual(rightRgpchByte))
-                //    {
-                //        int asd = 0;
-                //    }
-
-                //    int zxcv = 0;
-                    
-                //}
-                //else
-                //{
-                //    l.Add(leftRgpchBytes);
-                //    r.Add(rightRgpchByte);
-                //}
-
-                //UInt64 dataStorage = BitConverter.ToUInt64(data, i * 8);
-                //res[i] = dataStorage ^ ConcatUint32(leftRgpch, rightRgpch);
                 for (int j = 0; j < 4; j++)
                 {
                     if (data.Length <= i * 8 + j) break;
@@ -185,10 +146,7 @@ namespace Program
                 }
             }
 
-            //byte[] bytes = ConcatArrayUint64ToByte(res);
-            //f = true;
-
-            return Encoding.UTF8.GetString(data);
+            return data;
         }
 
         private Byte[] Coding(Byte[] data, UInt32[] keyStorage, bool isEncoding)
@@ -315,8 +273,10 @@ namespace Program
             return block ^ rightBlock;
         }
 
-        private Byte[] SplitStringIntoBytes(String data)
+        public Byte[] SplitStringIntoBytes(String data)
         {
+            if (data.Length == 0) return new byte[0];
+
             String[] splitData = new String[data.Length];
 
             int byteIndex = 0;

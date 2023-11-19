@@ -6,7 +6,15 @@ namespace Program
     {
         public KeyArgumentException(String massage) :
             base(massage)
-        { 
+        {
+        }
+    }
+
+    class RGSPCArgumentException : ArgumentException
+    {
+        public RGSPCArgumentException(String massage) :
+            base(massage)
+        {
         }
     }
 
