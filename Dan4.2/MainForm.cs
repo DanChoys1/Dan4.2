@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Security.Cryptography.Xml;
 using System.Windows.Forms;
 
 namespace Program
@@ -93,53 +94,60 @@ namespace Program
         }
 
         #region Encrypting text function
-
+        static string s;
         private void EncryptButton_Click(object sender, EventArgs e)
         {
-            ICipher cipher = GetCipher();
+            //ICipher cipher = GetCipher();
 
-            if(cipher == null)
-            {
-                return;
-            }
+            //if(cipher == null)
+            //{
+            //    return;
+            //}
 
-            try
-            {
-                encryptedTextBox.Text = cipher.Encode(openTextBox.Text, keyTextBox.Text);
-            }
-            catch (Exception ex)
-            {
-                cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
-                return;
-            }
+            //try
+            //{
+            //    encryptedTextBox.Text = cipher.Encode(openTextBox.Text, keyTextBox.Text);
+            //}
+            //catch (Exception ex)
+            //{
+            //    cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
+            //    return;
+            //}
 
-            cipherTextBoxErrorProvider.Clear();
+            //cipherTextBoxErrorProvider.Clear();
+
+            Gost28147_89 gost = new Gost28147_89();
+            encryptedTextBox.Text = gost.GammaCrypt(openTextBox.Text, keyTextBox.Text, keyTextBox.Text.Substring(0, keyTextBox.Text.Length/4));
         }
 
         private void DecipherButton_Click(object sender, EventArgs e)
         {
-            ICipher cipher = GetCipher();
+            //ICipher cipher = GetCipher();
 
-            String encryptedData;
+            //String encryptedData;
 
-            try
-            {
-                encryptedData = cipher.Decode(encryptedTextBox.Text, keyTextBox.Text);
-            }
-            catch (KeyArgumentException ex)
-            {
-                cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
-                return;
-            }
-            catch (EncryptedTextException ex)
-            {
-                cipherTextBoxErrorProvider.SetError(encryptedTextBox, ex.Message);
-                return;
-            }
+            //try
+            //{
+            //    encryptedData = cipher.Decode(encryptedTextBox.Text, keyTextBox.Text);
+            //}
+            //catch (KeyArgumentException ex)
+            //{
+            //    cipherTextBoxErrorProvider.SetError(keyTextBox, ex.Message);
+            //    return;
+            //}
+            //catch (EncryptedTextException ex)
+            //{
+            //    cipherTextBoxErrorProvider.SetError(encryptedTextBox, ex.Message);
+            //    return;
+            //}
 
+            //openTextBox.Text = encryptedData;
+
+            //cipherTextBoxErrorProvider.Clear();
+
+            Gost28147_89 gost = new Gost28147_89();
+            String encryptedData = gost.GammaCrypt(encryptedTextBox.Text, keyTextBox.Text, keyTextBox.Text.Substring(0, keyTextBox.Text.Length / 4));
             openTextBox.Text = encryptedData;
-
-            cipherTextBoxErrorProvider.Clear();
         }
 
         private ICipher GetCipher()
